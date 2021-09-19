@@ -46,17 +46,17 @@ public class FileDataLoader implements DataLoader {
 
             while (customerIterator.hasNext()) {
                 JSONObject customerJsonObject = (JSONObject) customerIterator.next();
-                Customer customer = Customer.builder().id((Integer) customerJsonObject.get("id")).
+                Customer customer = Customer.builder().id((Long) customerJsonObject.get("id")).
                         name((String) customerJsonObject.get("name")).
-                        attrNumber((Integer) customerJsonObject.get("attrNumber")).
+                        attrNumber((Long)customerJsonObject.get("attrNumber")).
                         build();
-                JSONArray productArray = (JSONArray) jsonObject.get("products");
+                JSONArray productArray = (JSONArray) customerJsonObject.get("products");
                 Iterator productIterator = productArray.iterator();
 
                 List<Product> customerProducts = new ArrayList<>();
                 while (productIterator.hasNext()) {
-                    JSONObject productJsonObject = (JSONObject) customerIterator.next();
-                    customerProducts.add(Product.builder().id((Integer) productJsonObject.get("id")).build());
+                    JSONObject productJsonObject = (JSONObject) productIterator.next();
+                    customerProducts.add(Product.builder().id((Long) productJsonObject.get("id")).build());
                 }
                 customer.setProducts(customerProducts);
                 customers.add(customer);
@@ -79,9 +79,9 @@ public class FileDataLoader implements DataLoader {
 
             while (productIterator.hasNext()) {
                 JSONObject productJsonObject = (JSONObject) productIterator.next();
-                Product product = Product.builder().id((Integer) productJsonObject.get("id")).
+                Product product = Product.builder().id((Long) productJsonObject.get("id")).
                         name((String) productJsonObject.get("name")).
-                        attrNumber((Integer) productJsonObject.get("attrNumber")).
+                        attrNumber((Long) productJsonObject.get("attrNumber")).
                         department((String) productJsonObject.get("department")).
                         build();
 

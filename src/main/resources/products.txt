@@ -1,29 +1,30 @@
- [
-    "product": {
+{"products" :[
+    {
           "id": 1,
           "name": "saving",
           "department": "accounts",
           "attrNumber" :2
 
       },
-    "product":{
+    {
           "id": 2,
           "name": "current",
           "department": "accounts",
           "attrNumber" :2
 
       },
-    "product":{
+    {
           "id": 3,
           "name": "master",
           "department": "debit-cards",
           "attrNumber" :2
     },
 
-    "product":{
+    {
           "id": 4,
           "name": "visa",
           "department": "debit-cards",
           "attrNumber" :2
     }
    ]
+}

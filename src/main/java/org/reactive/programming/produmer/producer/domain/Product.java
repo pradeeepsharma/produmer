@@ -12,8 +12,8 @@ import java.io.Serializable;
 @Builder
 public class Product implements Serializable {
     @NonNull
-    private int id;
-    private int attrNumber;
+    private Long id;
+    private Long attrNumber;
     private String name;
     private String department;
 

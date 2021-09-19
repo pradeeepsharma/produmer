@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @Service
@@ -37,14 +38,22 @@ public class KafkaPublisherService implements PublisherService {
     @Override
     public void uploadCustomerData() {
         System.out.println("Customer data being upload "+customers.size());
-        dataLoader.loadNewCustomerData();
+        try {
+            dataLoader.loadNewCustomerData();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         customers.stream().forEach(customer -> sendMessage(customer_topic, customer));
     }
 
     @Override
     public void uploadProductData() {
         System.out.println("Product date being upload :"+products.size());
-        dataLoader.loadNewProductData();
+        try {
+            dataLoader.loadNewProductData();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         products.stream().forEach(product -> sendMessage(product_topic, product));
     }
 

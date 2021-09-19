@@ -21,13 +21,13 @@ public class DataLoaderTest {
 
     @Test
     public void can_load_customers_from_file() throws IOException {
-        List<CustomerModel> customers = dataLoader.loadCustomers();
-        assertEquals(2,customers.size());
+        dataLoader.loadNewCustomerData();
+        assertEquals(2,dataLoader.getCustomers().size());
     }
 
     @Test
     public void can_load_products_from_file() throws IOException {
-        List<ProductModel> productModels = dataLoader.loadProducts();
-        assertEquals(4, productModels.size());
+        dataLoader.loadNewProductData();
+        assertEquals(4, dataLoader.getProducts().size());
     }
 }

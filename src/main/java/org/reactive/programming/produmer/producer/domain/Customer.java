@@ -14,8 +14,8 @@ import java.util.List;
 public class Customer implements Serializable {
 
     @NonNull
-    private int id;
-    private int attrNumber;
+    private Long id;
+    private Long attrNumber;
     @NonNull
     private String name;
     private List<Product> products;
