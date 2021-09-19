@@ -18,7 +18,7 @@ public class ProducerController {
     @Scheduled(cron = "0/30 * * * * *")
     public void performTaskUsingCron() {
         System.out.println("Callin producers");
-        publisherService.uploadCustomerData();
         publisherService.uploadProductData();
+        publisherService.uploadCustomerData();
     }
 }
