@@ -1,7 +1,11 @@
 package org.reactive.programming.produmer.producer.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.parser.JSONParser;
 import org.reactive.programming.produmer.producer.domain.Customer;
 import org.reactive.programming.produmer.producer.domain.Product;
+import org.reactive.programming.produmer.producer.exception.NoValidFileException;
 import org.reactive.programming.produmer.producer.repository.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +26,7 @@ public class KafkaPublisherService implements PublisherService {
     DataLoader dataLoader;
 
     @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Value("${kafka.topic.customer}")
     String customer_topic;
@@ -38,33 +42,49 @@ public class KafkaPublisherService implements PublisherService {
     @Override
     public void uploadCustomerData() {
         System.out.println("Customer data being upload "+customers.size());
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             dataLoader.loadNewCustomerData();
-        } catch (FileNotFoundException e) {
+            customers.stream().forEach(customer -> {
+                try {
+                    sendMessage(customer_topic, objectMapper.writeValueAsString(customer));
+                } catch (JsonProcessingException e) {
+                    System.out.println("Could not convert to string :"+customer);
+                }
+            });
+        } catch (NoValidFileException e) {
+            System.out.println("Not sending any customer to topic");
             e.printStackTrace();
         }
-        customers.stream().forEach(customer -> sendMessage(customer_topic, customer));
     }
 
     @Override
     public void uploadProductData() {
         System.out.println("Product date being upload :"+products.size());
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             dataLoader.loadNewProductData();
-        } catch (FileNotFoundException e) {
+            products.stream().forEach(product -> {
+                try {
+                    sendMessage(product_topic, objectMapper.writeValueAsString(product));
+                } catch (JsonProcessingException e) {
+                    System.out.println("Could not convert to string :"+product);
+                }
+            });
+        } catch (NoValidFileException e) {
+            System.out.println("Not sending any product to topic");
             e.printStackTrace();
         }
-        products.stream().forEach(product -> sendMessage(product_topic, product));
     }
 
-    private void sendMessage(String topicName, Object object) {
+    protected void sendMessage(String topicName, String objectAsString) {
 
-        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicName, object);
+        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, objectAsString);
 
-        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
 
             @Override
-            public void onSuccess(SendResult<String, Object> result) {
+            public void onSuccess(SendResult<String, String> result) {
                 System.out.println("Sent object with offset=[" + result.getRecordMetadata().offset() + "]");
             }
             @Override

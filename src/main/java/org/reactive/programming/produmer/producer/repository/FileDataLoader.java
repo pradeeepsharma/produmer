@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.reactive.programming.produmer.producer.domain.Customer;
 import org.reactive.programming.produmer.producer.domain.Product;
+import org.reactive.programming.produmer.producer.exception.NoValidFileException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
@@ -34,7 +35,7 @@ public class FileDataLoader implements DataLoader {
         return products;
     }
 
-    public void loadNewCustomerData() throws FileNotFoundException {
+    public void loadNewCustomerData() throws NoValidFileException {
 
         try (FileReader reader = new FileReader(new ClassPathResource(CUSTOMER_FILE_NAME).getFile())) {
 
@@ -62,13 +63,13 @@ public class FileDataLoader implements DataLoader {
                 customers.add(customer);
             }
         } catch (IOException | ParseException ie) {
-            throw new FileNotFoundException("File not found");
+            throw new NoValidFileException(ie, "There is no valid file present with the file name specified");
         }
 
     }
 
     @Override
-    public void loadNewProductData() throws FileNotFoundException {
+    public void loadNewProductData() throws NoValidFileException {
         try (FileReader reader = new FileReader(new ClassPathResource(PRODUCT_FILE_NAME).getFile())) {
 
             JSONParser jsonParser = new JSONParser();
@@ -89,7 +90,7 @@ public class FileDataLoader implements DataLoader {
                 products.add(product);
             }
         } catch (IOException | ParseException ie) {
-            throw new FileNotFoundException("File not found");
+            throw new NoValidFileException(ie, "There is no valid file present with the file name specified");
         }
 
     }
