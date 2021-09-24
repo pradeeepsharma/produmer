@@ -1,0 +1,35 @@
+{"customers":
+    [
+        {
+          "id": 1,
+          "name": "mandeep",
+          "registeredDate": "01-01-2020",
+          "attrNumber": 0,
+          "products": [
+             {
+                  "id": 1
+            },
+            {
+                    "id": 2
+             },
+            {
+                    "id": 3
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "pradeep",
+          "registeredDate": "01-01-2020",
+          "attrNumber": 1,
+          "products": [
+               {
+                    "id": 4
+              },
+               {
+                    "id": 2
+               }
+            ]
+        }
+      ]
+  }
